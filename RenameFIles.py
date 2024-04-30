@@ -28,7 +28,8 @@ def directory():
     mode = input("Choose Mode : ")
     if mode == "1":  
         # use current directory
-        dir_path = os.getcwd()
+        full_path = os.path.realpath(__file__)
+        dir_path = os.path.dirname(full_path)
         return dir_path
     elif mode == "2":
         # user inputed directory
@@ -86,6 +87,7 @@ while True:
         print("Choose to slice from where to where : ")
         find_slice(cleaned)
         start = input("input start slice : ")
+        print("Input big number like 999 to slice to end")
         end = input("input end slice : ")
         change_name(cleaned, start, end)
         os.startfile(dir)

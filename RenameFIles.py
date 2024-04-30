@@ -2,9 +2,10 @@
 # Check the files to match extensions only
 # Add an extra file to store extensions
 # Mode 1 which use current directory is still broken
-# adding fail safe
-# adding confirmation
-# adding history
+# add confirmation before renaming
+# add history system
+# add custom names instead of just slicing
+# add fail safe to guard from files that has different character length ex : myfile1, my file03, my file11
 
 import os
 

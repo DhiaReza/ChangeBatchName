@@ -1,22 +1,25 @@
-# ChangeBatchName
+# Warning The Code Only Been Tested in Windows ONLY
+## There is no history system YET, so what has been done is not reversible
+
+### ChangeBatchName
 A small project that aims to make a python script to change files names in batch. It works not by replacing or renaming but
 by slicing files names. ex : a file in named "[asdasd] My file.mp4"
 
-[ | 0
-a | 1
-s | 2
-d | 3
-] | 4
-M | 5
-y | 6
-f | 7
-i | 8
-l | 9
-e | 10
-. | 11
-m | 12
-p | 13
-4 | 14
+0. [ | 0
+1. a | 1
+2. s | 2
+3. d | 3
+4. ] | 4
+5. M | 5
+6. y | 6
+7. f | 7
+8. i | 8
+9. l | 9
+10. e | 10
+11. . | 11
+12. m | 12
+13. p | 13
+14. 4 | 14
 
 we slice from 5 to 14
 the result is renamed file of "My file.mp4"

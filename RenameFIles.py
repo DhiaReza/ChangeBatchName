@@ -1,3 +1,11 @@
+# TO DO
+# Check the files to match extensions only
+# Add an extra file to store extensions
+# Mode 1 which use current directory is still broken
+# adding fail safe
+# adding confirmation
+# adding history
+
 import os
 
 # file extensions to check
@@ -6,6 +14,8 @@ files_extensions = [".mp4", ".mkv"]
 # file directory
 dir_path = ""
 
+cont = True
+
 def directory():
     global dir_path
     
@@ -13,6 +23,7 @@ def directory():
     print("1 to use current directory")
     print("2 to use user input directory")
     print("3 to add file extensions to check")
+    print("4 to end")
     mode = input("Choose Mode : ")
     if mode == "1":  
         # use current directory
@@ -29,6 +40,9 @@ def directory():
         files_extensions.append(more_ext)
         print(more_ext, ' has been added')
         directory()
+    elif mode == "4":
+        print("Thank You!")
+        return False
     else:
         print("wrong input!\n")
         directory()
@@ -38,19 +52,39 @@ def get_files(dir_path):
     files_names = os.listdir(dir_path)
     return files_names
 
-# # checking which to slice
-# for x in range(0, len(files_names[1])):
-# 	print(files_names[1][x], " | ", x)
+# Clean the file list to match extensions
+def clean_list(files_list):
+    cleaned_list = []
+    for x in range(0, len(files_list)):
+        for y in range(0, len(files_extensions)):
+            if files_list[x].endswith(files_extensions[y]):
+                cleaned_list.append(files_list[x])
+    return cleaned_list
 
-# #checking for every files and every file extensions
-# for filename in files_names:
-#     # check if the file is something
-#     for file_ext in range(0, len(files_extensions)):
-#         if filename.endswith(files_extensions[file_ext]):
-#             old_file_path = os.path.join(dir_path, filename)
-#             filename_new = filename[11:len(filename)]
-#             new_file_path = os.path.join(dir_path, filename_new)
-#             os.rename(old_file_path, new_file_path)
+# checking which to slice
+def find_slice(files_names):
+    for x in range(0, len(files_names[1])):
+        print(files_names[1][x], " | ", x)
 
-directory()
-print(dir_path)
+#checking for every files and every file extensions
+def change_name(files_names, start, end):
+    for filename in files_names:
+        old_file_path = os.path.join(dir_path, filename)
+        filename_new = filename[int(start):int(end) + 1]
+        new_file_path = os.path.join(dir_path, filename_new)
+        os.rename(old_file_path, new_file_path)
+    print("Files has been renamed!")
+
+while True:
+    dir = directory()
+
+    if dir == False:
+        break
+    else:
+        cleaned = clean_list(get_files(dir))
+        print("Choose to slice from where to where : ")
+        find_slice(cleaned)
+        start = input("input start slice : ")
+        end = input("input end slice : ")
+        change_name(cleaned, start, end)
+        os.startfile(dir)

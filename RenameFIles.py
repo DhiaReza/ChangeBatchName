@@ -17,6 +17,7 @@ dir_path = ""
 
 cont = True
 
+# first
 def directory():
     global dir_path
     
@@ -49,11 +50,13 @@ def directory():
         print("wrong input!\n")
         directory()
 
+# Second
 def get_files(dir_path):
     # get file list in a directory
     files_names = os.listdir(dir_path)
     return files_names
 
+# Third
 # Clean the file list to match extensions
 def clean_list(files_list):
     cleaned_list = []
@@ -63,10 +66,17 @@ def clean_list(files_list):
                 cleaned_list.append(files_list[x])
     return cleaned_list
 
+# Fourth
 # checking which to slice
 def find_slice(files_names):
-    for x in range(0, len(files_names[1])):
-        print(files_names[1][x], " | ", x)
+    if not files_names:
+        print("There are no files that are available to rename")
+        print("Check the extensions to make sure you've add the right extensions")
+        return False
+    else:
+        for x in range(0, len(files_names[1])):
+            print(files_names[1][x], " | ", x)
+        return True
 
 #checking for every files and every file extensions
 def change_name(files_names, start, end):
@@ -84,10 +94,13 @@ while True:
         break
     else:
         cleaned = clean_list(get_files(dir))
-        print("Choose to slice from where to where : ")
-        find_slice(cleaned)
-        start = input("input start slice : ")
-        print("Input big number like 999 to slice to end")
-        end = input("input end slice : ")
-        change_name(cleaned, start, end)
-        os.startfile(dir)
+        where_slice = find_slice(cleaned)
+        if where_slice == False:
+            directory()
+        elif where_slice == True:
+            print("Choose to slice from where to where : ")
+            start = input("input start slice : ")
+            print("Input big number like 999 to slice to end")
+            end = input("input end slice : ")
+            change_name(cleaned, start, end)
+            #os.startfile(dir)

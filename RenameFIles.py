@@ -1,26 +1,32 @@
 # TO DO
-# Check the files to match extensions only
+# Check the files to match extensions only DONE
 # Add an extra file to store extensions
-# Mode 1 which use current directory is still broken
+# Mode 1 which use current directory is still broken DONE
 # add confirmation before renaming
 # add history system
 # add custom names instead of just slicing
 # add fail safe to guard from files that has different character length ex : myfile1, my file03, my file11
 
+#How to build :
+# pyinstaller -F RenameFiles.py
+
 import os
+import time
 
 # file extensions to check
 files_extensions = [".mp4", ".mkv"]
 
 # file directory
-dir_path = ""
+dir = True
 
 cont = True
 
 # first
 def directory():
     global dir_path
-    
+
+    print("Current extensions to check : ")
+    print(files_extensions)
     print("List of modes :")
     print("1 to use current directory")
     print("2 to use user input directory")
@@ -45,6 +51,7 @@ def directory():
         directory()
     elif mode == "4":
         print("Thank You!")
+        countdown(3)
         return False
     else:
         print("wrong input!\n")
@@ -53,14 +60,20 @@ def directory():
 # Second
 def get_files(dir_path):
     # get file list in a directory
-    files_names = os.listdir(dir_path)
-    return files_names
+    try:
+        files_names = os.listdir(dir_path)
+        return files_names
+    except:
+        print("There are no such directory!")
+        print("Your input : ", dir_path)
+        return False
+        
 
 # Third
 # Clean the file list to match extensions
 def clean_list(files_list):
     cleaned_list = []
-    for x in range(0, len(files_list)):
+    for x in range(0, len(files_list)): # need to check if a file list is empty or not
         for y in range(0, len(files_extensions)):
             if files_list[x].endswith(files_extensions[y]):
                 cleaned_list.append(files_list[x])
@@ -87,16 +100,29 @@ def change_name(files_names, start, end):
         os.rename(old_file_path, new_file_path)
     print("Files has been renamed!")
 
+def countdown(t): 
+    while t: 
+        mins, secs = divmod(t, 60) 
+        #timer = '{:02d}:{:02d}'.format(mins, secs) 
+        #print(timer, end="\r") 
+        time.sleep(1) 
+        t -= 1
+
 while True:
     dir = directory()
 
     if dir == False:
         break
     else:
-        cleaned = clean_list(get_files(dir))
-        where_slice = find_slice(cleaned)
+        files = get_files(dir)
+        if files != False:
+            cleaned = clean_list(get_files(dir))
+            where_slice = find_slice(cleaned)
+        else:
+            where_slice = False
         if where_slice == False:
-            directory()
+            if dir == False:
+                break
         elif where_slice == True:
             print("Choose to slice from where to where : ")
             start = input("input start slice : ")

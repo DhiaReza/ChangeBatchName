@@ -62,6 +62,10 @@ def get_files(dir_path):
     # get file list in a directory
     try:
         files_names = os.listdir(dir_path)
+        print("Your Files : ")
+        for x in files_names:
+            print((files_names.index(x)+1),". ",x)
+        print("")
         return files_names
     except:
         print("There are no such directory!")
@@ -85,6 +89,7 @@ def find_slice(files_names):
     if not files_names:
         print("There are no files that are available to rename")
         print("Check the extensions to make sure you've add the right extensions")
+        print("")
         return False
     else:
         for x in range(0, len(files_names[1])):
@@ -108,6 +113,18 @@ def countdown(t):
         time.sleep(1) 
         t -= 1
 
+def check_input(placeholder1, placeholder2):
+    while True:
+        try:
+            start_slice = int(input(placeholder1))
+            end_slice = int(input(placeholder2))
+            if start_slice >= 0 and end_slice >= 0:
+                return start_slice, end_slice
+            else:
+                print("Your input number is less than 0. Please enter numbers greater than or equal to 0.\n")
+        except ValueError:
+            print("Your input is not a number. Please enter a valid number.\n")
+
 while True:
     dir = directory()
 
@@ -116,7 +133,7 @@ while True:
     else:
         files = get_files(dir)
         if files != False:
-            cleaned = clean_list(get_files(dir))
+            cleaned = clean_list(files)
             where_slice = find_slice(cleaned)
         else:
             where_slice = False
@@ -124,9 +141,8 @@ while True:
             if dir == False:
                 break
         elif where_slice == True:
-            print("Choose to slice from where to where : ")
-            start = input("input start slice : ")
-            print("Input big number like 999 to slice to end")
-            end = input("input end slice : ")
-            change_name(cleaned, start, end)
+            while True:
+                from_to_slice = check_input("input start slice : ", "input end slice : ")
+                change_name(cleaned, from_to_slice[0], from_to_slice[1])
+                break
             #os.startfile(dir)

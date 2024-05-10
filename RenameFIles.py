@@ -1,10 +1,8 @@
 # TO DO
-# Check the files to match extensions only DONE
 # Add an extra file to store extensions
-# Mode 1 which use current directory is still broken DONE
 # add confirmation before renaming
 # add history system
-# add custom names instead of just slicing
+# add custom names instead of just slicing ( use var.replace() and then var.strip() )
 # add fail safe to guard from files that has different character length ex : myfile1, my file03, my file11
 
 #How to build :

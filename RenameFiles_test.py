@@ -8,17 +8,26 @@
 #How to build :
 # pyinstaller -F RenameFiles.py
 
+# ask path, then mode slice or replace. 
+# or ask slice or replace then path
+
 import os
 import time
 
 # file extensions to check
 files_extensions = [".mp4", ".mkv"]
 
-# file directory
+# directory path
 dir_path = ""
 
-# first
-#choose directory
+# Add file extensions to check
+def add_extensions():
+    print("Current extensions to check: ", files_extensions)
+    more_ext = input("Input extensions here (example: .mp3): ")
+    files_extensions.append(more_ext)
+    print(f"{more_ext} has been added")
+
+# Choose directory mode
 def choose_directory():
     global dir_path
     print("List of modes:")
@@ -44,80 +53,34 @@ def choose_directory():
         choose_directory()
     return dir_path
 
-#use current directory
-def current_dir():
-    # use current directory
-    full_path = os.path.realpath(__file__)
-    dir_path = os.path.dirname(full_path)
-    global dir
-    dir = dir_path
-    return dir_path
-
-#use custom directory
-def custom_dir():
-    # user inputed directory
-    dir_path = input("Copy and Paste you directory here : ")
-    global dir
-    dir = dir_path
-    return dir_path
-
-# Add file extensions to check
-def add_extensions():
-    print("Current extensions to check: ", files_extensions)
-    more_ext = input("Input extensions here (example: .mp3): ")
-    files_extensions.append(more_ext)
-    print(f"{more_ext} has been added")
-
-# Second
+# Get files in the directory
 def get_files(dir_path):
-    # get file list in a directory
     try:
         files_names = os.listdir(dir_path)
-        print("Your Files : ")
+        print("Your Files: ")
         for x in files_names:
-            print((files_names.index(x)+1),". ",x)
+            print((files_names.index(x)+1), ". ", x)
         print("")
         return files_names
-    except:
-        print("There are no such directory!")
-        print("Your input : ", dir_path)
+    except FileNotFoundError:
+        print("There is no such directory!")
+        print("Your input: ", dir_path)
         return False
 
-# Third
-# Clean the file list to match extensions
+# Filter files by extension
 def clean_list(files_list):
-    cleaned_list = []
-    for x in range(0, len(files_list)): # need to check if a file list is empty or not
-        for y in range(0, len(files_extensions)):
-            if files_list[x].endswith(files_extensions[y]):
-                cleaned_list.append(files_list[x])
-    return cleaned_list
+    return [file for file in files_list if any(file.endswith(ext) for ext in files_extensions)]
 
-# Fourth
-# checking which to slice
-def find_slice(files_names):
-    if not files_names:
-        print("There are no files that are available to rename")
-        print("Check the extensions to make sure you've add the right extensions")
-        print("")
-        return False
-    else:
-        for x in range(0, len(files_names[1])):
-            print(files_names[1][x], " | ", x)
-        return True
-
-# fifth
-# renaming files by slicing
+# Rename files using slicing
 def rename_files_slice(files_names, start, end):
     for filename in files_names:
         old_file_path = os.path.join(dir_path, filename)
-        filename_new = filename[int(start):int(end) + 1]
+        filename_new = filename[int(start):int(end) + 1] + os.path.splitext(filename)[1]
         new_file_path = os.path.join(dir_path, filename_new)
         os.rename(old_file_path, new_file_path)
-    print("Files has been renamed!")
+    print("Files have been renamed using slicing!")
 
-# sixth
-# or Rename files using replace
+# Rename files using replace
 def rename_files_replace(files_names, old_str, new_str):
     for filename in files_names:
         old_file_path = os.path.join(dir_path, filename)
@@ -126,19 +89,19 @@ def rename_files_replace(files_names, old_str, new_str):
         os.rename(old_file_path, new_file_path)
     print("Files have been renamed using replace!")
 
-def countdown(t): 
-    while t: 
-        #mins, secs = divmod(t, 60) 
-        #timer = '{:02d}:{:02d}'.format(mins, secs) 
-        #print(timer, end="\r") 
-        time.sleep(1) 
+# Countdown timer
+def countdown(t):
+    while t:
+        mins, secs = divmod(t, 60)
+        time.sleep(1)
         t -= 1
 
-def check_input(start, end):
+# Input validation for slicing
+def check_input(placeholder1, placeholder2):
     while True:
         try:
-            start_slice = int(input(start))
-            end_slice = int(input(end))
+            start_slice = int(input(placeholder1))
+            end_slice = int(input(placeholder2))
             if start_slice >= 0 and end_slice >= 0:
                 return start_slice, end_slice
             else:
@@ -174,7 +137,7 @@ def main():
                     rename_files_slice(cleaned, start, end)
                 elif mode == "2":
                     old_str = input("Enter the string to replace: ")
-                    new_str = input("Enter the new string: (don't type anything to delete the string)")
+                    new_str = input("Enter the new string: ")
                     rename_files_replace(cleaned, old_str, new_str)
                 else:
                     print("Wrong input!\n")
